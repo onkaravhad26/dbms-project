@@ -166,6 +166,33 @@ def update_status(complaint_id):
         return redirect(url_for('admin.view_complaints'))
 
 
+@admin_bp.route('/delete-complaint/<int:complaint_id>')
+@admin_login_required
+def delete_complaint(complaint_id):
+    try:
+        conn = get_db()
+        cur  = conn.cursor()
+
+        # Check if the complaint exists and is 'Resolved'
+        cur.execute("SELECT status FROM complaints WHERE id = %s", (complaint_id,))
+        complaint = cur.fetchone()
+
+        if not complaint:
+            flash('Complaint not found.', 'danger')
+        elif complaint[0] != 'Resolved':
+            flash('Only resolved complaints can be deleted.', 'warning')
+        else:
+            cur.execute("DELETE FROM complaints WHERE id = %s", (complaint_id,))
+            conn.commit()
+            flash('Complaint deleted successfully!', 'success')
+
+        cur.close()
+    except Exception as e:
+        flash(f'An error occurred: {str(e)}', 'danger')
+
+    return redirect(url_for('admin.view_complaints'))
+
+
 @admin_bp.route('/logout')
 def admin_logout():
     session.pop('admin_id', None)
