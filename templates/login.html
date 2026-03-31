@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Login — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="form-card form-card-sm">
+        <div class="form-header">
+            <div class="form-icon">🔑</div>
+            <h1>Student Login</h1>
+            <p>Welcome back! Log in to your account</p>
+        </div>
+        <form method="POST" action="{{ url_for('student.login') }}">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Login</button>
+        </form>
+        <div class="form-footer">
+            Don't have an account? <a href="{{ url_for('student.register') }}">Register here</a>
+        </div>
+        <div class="form-footer">
+            Are you an admin? <a href="{{ url_for('admin.admin_login') }}">Admin Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

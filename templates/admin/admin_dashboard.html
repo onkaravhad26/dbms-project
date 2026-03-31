@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Admin Dashboard</h1>
+        <p class="page-subtitle">Welcome, <strong>{{ session['admin_name'] }}</strong> — Overview of all complaints</p>
+    </div>
+    <a href="{{ url_for('admin.view_complaints') }}" class="btn btn-primary">View All Complaints</a>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card stat-pending">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-number">{{ pending }}</div>
+        <div class="stat-label">Pending</div>
+        <div class="stat-desc">Awaiting review</div>
+    </div>
+    <div class="stat-card stat-inprogress">
+        <div class="stat-icon">🔧</div>
+        <div class="stat-number">{{ in_progress }}</div>
+        <div class="stat-label">In Progress</div>
+        <div class="stat-desc">Currently being resolved</div>
+    </div>
+    <div class="stat-card stat-resolved">
+        <div class="stat-icon">✅</div>
+        <div class="stat-number">{{ resolved }}</div>
+        <div class="stat-label">Resolved</div>
+        <div class="stat-desc">Successfully closed</div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">
+        <h2>Quick Actions</h2>
+    </div>
+    <div class="quick-actions">
+        <a href="{{ url_for('admin.view_complaints') }}" class="quick-action-card">
+            <div class="qa-icon">📋</div>
+            <div class="qa-text">
+                <strong>View All Complaints</strong>
+                <span>Browse and manage every complaint</span>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.view_complaints') }}?status=Pending" class="quick-action-card">
+            <div class="qa-icon">⏳</div>
+            <div class="qa-text">
+                <strong>Pending Complaints</strong>
+                <span>{{ pending }} complaints need attention</span>
+            </div>
+        </a>
+        <a href="{{ url_for('admin.view_complaints') }}?status=In+Progress" class="quick-action-card">
+            <div class="qa-icon">🔧</div>
+            <div class="qa-text">
+                <strong>In Progress</strong>
+                <span>{{ in_progress }} complaints being handled</span>
+            </div>
+        </a>
+    </div>
+</div>
+{% endblock %}

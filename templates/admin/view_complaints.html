@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}View Complaints — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>All Complaints</h1>
+        <p class="page-subtitle">Browse and manage complaints filed by students</p>
+    </div>
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-secondary">← Dashboard</a>
+</div>
+
+<div class="card">
+    <div class="filter-bar">
+        <span class="filter-label">Filter by Status:</span>
+        <div class="filter-buttons">
+            <a href="{{ url_for('admin.view_complaints') }}?status=All"
+               class="filter-btn {% if status_filter == 'All' %}active{% endif %}">All</a>
+            <a href="{{ url_for('admin.view_complaints') }}?status=Pending"
+               class="filter-btn filter-pending {% if status_filter == 'Pending' %}active{% endif %}">Pending</a>
+            <a href="{{ url_for('admin.view_complaints') }}?status=In Progress"
+               class="filter-btn filter-inprogress {% if status_filter == 'In Progress' %}active{% endif %}">In Progress</a>
+            <a href="{{ url_for('admin.view_complaints') }}?status=Resolved"
+               class="filter-btn filter-resolved {% if status_filter == 'Resolved' %}active{% endif %}">Resolved</a>
+        </div>
+        <span class="badge-count">{{ complaints|length }} complaint(s)</span>
+    </div>
+
+    {% if complaints %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Student Name</th>
+                    <th>Room No.</th>
+                    <th>Category</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Date Filed</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in complaints %}
+                <tr>
+                    <td><span class="id-badge">#{{ c[0] }}</span></td>
+                    <td><strong>{{ c[1] }}</strong></td>
+                    <td>{{ c[2] if c[2] else '—' }}</td>
+                    <td><span class="category-tag">{{ c[3] if c[3] else 'Uncategorized' }}</span></td>
+                    <td class="complaint-title">{{ c[4] }}</td>
+                    <td>
+                        {% if c[5] == 'Pending' %}
+                            <span class="badge badge-pending">Pending</span>
+                        {% elif c[5] == 'In Progress' %}
+                            <span class="badge badge-inprogress">In Progress</span>
+                        {% elif c[5] == 'Resolved' %}
+                            <span class="badge badge-resolved">Resolved</span>
+                        {% endif %}
+                    </td>
+                    <td class="date-col">{{ c[6].strftime('%d %b %Y') if c[6] else 'N/A' }}</td>
+                    <td>
+                        <a href="{{ url_for('admin.update_status', complaint_id=c[0]) }}"
+                           class="btn btn-sm btn-primary">Update</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No complaints found</h3>
+        <p>
+            {% if status_filter == 'All' %}
+                No complaints have been filed yet.
+            {% else %}
+                No complaints with status "{{ status_filter }}".
+            {% endif %}
+        </p>
+        <a href="{{ url_for('admin.view_complaints') }}" class="btn btn-secondary">Show All</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

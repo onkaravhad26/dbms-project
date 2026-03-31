@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Admin Login — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="form-wrapper">
+    <div class="form-card form-card-sm">
+        <div class="form-header">
+            <div class="form-icon">🔐</div>
+            <h1>Admin Login</h1>
+            <p>Restricted area — authorized personnel only</p>
+        </div>
+        <form method="POST" action="{{ url_for('admin.admin_login') }}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter admin username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter admin password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Login as Admin</button>
+        </form>
+        <div class="form-footer">
+            <a href="{{ url_for('student.login') }}">← Back to Student Login</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

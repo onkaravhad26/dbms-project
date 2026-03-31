@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hostel CMS{% endblock %}</title>
+    <meta name="description" content="Hostel Complaint Management System — file and track complaints efficiently.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('student.index') }}">🏠 Hostel CMS</a>
+        </div>
+        <ul class="navbar-links">
+            {% if session.get('student_id') %}
+                <li><a href="{{ url_for('student.dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('student.file_complaint') }}">File Complaint</a></li>
+                <li><a href="{{ url_for('student.logout') }}" class="nav-logout">Logout</a></li>
+            {% elif session.get('admin_id') %}
+                <li><a href="{{ url_for('admin.admin_dashboard') }}">Admin Panel</a></li>
+                <li><a href="{{ url_for('admin.view_complaints') }}">Complaints</a></li>
+                <li><a href="{{ url_for('admin.admin_logout') }}" class="nav-logout">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('student.login') }}">Login</a></li>
+                <li><a href="{{ url_for('student.register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Hostel CMS &mdash; Complaint Management System</p>
+    </footer>
+
+</body>
+</html>

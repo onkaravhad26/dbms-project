@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}My Dashboard — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Welcome, {{ session['student_name'] }} 👋</h1>
+        <p class="page-subtitle">Manage and track all your hostel complaints here.</p>
+    </div>
+    <a href="{{ url_for('student.file_complaint') }}" class="btn btn-primary">+ File New Complaint</a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>My Complaints</h2>
+        <span class="badge-count">{{ complaints|length }} total</span>
+    </div>
+
+    {% if complaints %}
+    <div class="table-wrapper">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Date Filed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for complaint in complaints %}
+                <tr>
+                    <td><span class="id-badge">#{{ complaint[0] }}</span></td>
+                    <td class="complaint-title">{{ complaint[1] }}</td>
+                    <td>
+                        <span class="category-tag">{{ complaint[2] if complaint[2] else 'Uncategorized' }}</span>
+                    </td>
+                    <td>
+                        {% if complaint[3] == 'Pending' %}
+                            <span class="badge badge-pending">Pending</span>
+                        {% elif complaint[3] == 'In Progress' %}
+                            <span class="badge badge-inprogress">In Progress</span>
+                        {% elif complaint[3] == 'Resolved' %}
+                            <span class="badge badge-resolved">Resolved</span>
+                        {% endif %}
+                    </td>
+                    <td class="date-col">{{ complaint[4].strftime('%d %b %Y') if complaint[4] else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>No complaints yet</h3>
+        <p>You haven't filed any complaints. Click the button above to get started.</p>
+        <a href="{{ url_for('student.file_complaint') }}" class="btn btn-primary">File Your First Complaint</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

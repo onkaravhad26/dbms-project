@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Home — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-icon">🏠</div>
+        <h1>Hostel Complaint Management System</h1>
+        <p class="hero-subtitle">
+            A streamlined platform to file, track and resolve hostel complaints efficiently.
+            Students can submit issues directly to administration for quick resolution.
+        </p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('student.login') }}" class="btn btn-primary btn-lg">Student Login</a>
+            <a href="{{ url_for('student.register') }}" class="btn btn-outline btn-lg">Register Now</a>
+        </div>
+        <div class="hero-divider">or</div>
+        <a href="{{ url_for('admin.admin_login') }}" class="btn btn-secondary">Admin Portal</a>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>File Complaints</h3>
+            <p>Submit complaints with category, title, and full description easily.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <h3>Track Status</h3>
+            <p>Monitor real-time status updates — Pending, In Progress, or Resolved.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>Admin Resolution</h3>
+            <p>Administration reviews and resolves each complaint with remarks.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Secure Access</h3>
+            <p>Password-hashed logins and session-protected routes for all users.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

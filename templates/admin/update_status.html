@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Update Complaint #{{ complaint[0] }} — Hostel CMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Update Complaint <span class="id-badge-lg">#{{ complaint[0] }}</span></h1>
+        <p class="page-subtitle">Review complaint details and update the resolution status</p>
+    </div>
+    <a href="{{ url_for('admin.view_complaints') }}" class="btn btn-secondary">← Back to Complaints</a>
+</div>
+
+<div class="two-col-layout">
+    <!-- Complaint Details (Read-Only) -->
+    <div class="card detail-card">
+        <div class="card-header">
+            <h2>Complaint Details</h2>
+            <span class="detail-readonly">Read Only</span>
+        </div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Title</span>
+                <span class="detail-value">{{ complaint[1] }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Student Name</span>
+                <span class="detail-value">{{ complaint[5] }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Room Number</span>
+                <span class="detail-value">{{ complaint[6] if complaint[6] else '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Category</span>
+                <span class="detail-value">
+                    <span class="category-tag">{{ complaint[7] if complaint[7] else 'Uncategorized' }}</span>
+                </span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Filed On</span>
+                <span class="detail-value">{{ complaint[8].strftime('%d %B %Y, %I:%M %p') if complaint[8] else 'N/A' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Current Status</span>
+                <span class="detail-value">
+                    {% if complaint[3] == 'Pending' %}
+                        <span class="badge badge-pending">Pending</span>
+                    {% elif complaint[3] == 'In Progress' %}
+                        <span class="badge badge-inprogress">In Progress</span>
+                    {% elif complaint[3] == 'Resolved' %}
+                        <span class="badge badge-resolved">Resolved</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="detail-description">
+            <span class="detail-label">Description</span>
+            <div class="description-box">{{ complaint[2] }}</div>
+        </div>
+        {% if complaint[4] %}
+        <div class="detail-description">
+            <span class="detail-label">Previous Admin Remark</span>
+            <div class="description-box remark-box">{{ complaint[4] }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Update Form -->
+    <div class="card update-card">
+        <div class="card-header">
+            <h2>Update Status</h2>
+        </div>
+        <form method="POST" action="{{ url_for('admin.update_status', complaint_id=complaint[0]) }}">
+            <div class="form-group">
+                <label for="status">New Status <span class="required">*</span></label>
+                <select id="status" name="status" required>
+                    <option value="" disabled>-- Select Status --</option>
+                    <option value="Pending" {% if complaint[3] == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="In Progress" {% if complaint[3] == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Resolved" {% if complaint[3] == 'Resolved' %}selected{% endif %}>Resolved</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="remark">Admin Remark</label>
+                <textarea id="remark" name="remark" rows="5"
+                    placeholder="Add a note or remark about the resolution...">{{ complaint[4] if complaint[4] else '' }}</textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Update Complaint</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
